@@ -1,0 +1,310 @@
+<section class="view" id="view-enroll">
+
+  <!-- Page Header -->
+  <div class="page-heading enroll-page-heading">
+    <div class="heading-left">
+      <span class="eyebrow">ทะเบียนพนักงาน</span>
+
+      <div class="title-row">
+        <h2>เพิ่มพนักงาน</h2>
+        <span class="view-chip">ลงทะเบียน</span>
+      </div>
+
+      <p class="page-description">
+        กรอกข้อมูลพนักงานและบันทึกภาพใบหน้าเพื่อใช้ลงเวลา
+      </p>
+    </div>
+
+    <div class="heading-meta">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        ระบบพร้อมใช้งาน
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Main Content -->
+  <div class="enroll-layout">
+
+    <!-- LEFT : USER INFORMATION -->
+    <div class="panel form-panel">
+
+      <div class="panel-heading corporate-heading">
+        <div class="heading-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M20 21a8 8 0 0 0-16 0"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+
+        <div>
+          <span class="section-label">ขั้นตอนที่ 1</span>
+          <h3>ข้อมูลพนักงาน</h3>
+          <p class="sub">
+            กรอกข้อมูลพื้นฐานให้ครบถ้วน
+          </p>
+        </div>
+      </div>
+
+
+      <div class="form-content">
+
+        <!-- Name -->
+        <div class="form-group">
+          <label class="field-label" for="enroll-name">
+            ชื่อ-นามสกุล
+            <span class="required">*</span>
+          </label>
+
+          <input
+            type="text"
+            id="enroll-name"
+            class="corporate-input"
+            placeholder="เช่น สมชาย ใจดี"
+            autocomplete="name"
+          >
+
+          <small class="field-help">
+            ชื่อนี้จะแสดงในรายการลงเวลาและรายงาน
+          </small>
+        </div>
+
+
+        <!-- Position -->
+        <div class="form-group">
+          <label class="field-label" for="enroll-position">
+            ตำแหน่ง
+            <span class="optional">(ถ้ามี)</span>
+          </label>
+
+          <input
+            type="text"
+            id="enroll-position"
+            class="corporate-input"
+            placeholder="เช่น เจ้าหน้าที่ธุรการ"
+            autocomplete="organization-title"
+          >
+        </div>
+
+
+        <!-- Face Images -->
+        <div class="image-section">
+
+          <div class="shots-header corporate-shots-header">
+            <div>
+              <span class="shots-title">ภาพใบหน้าสำหรับลงเวลา</span>
+              <span class="shots-description">
+                ควรมีอย่างน้อย 3 ภาพ เพื่อเพิ่มความแม่นยำ
+              </span>
+            </div>
+
+            <span id="shot-count" class="shot-counter">
+              0 ภาพ
+            </span>
+          </div>
+
+
+          <div class="shots corporate-shots" id="enroll-shots">
+            <!-- Images inserted by JavaScript -->
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Form Footer -->
+      <div class="form-footer">
+
+        <div class="footer-info">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 10v6"/>
+            <path d="M12 7h.01"/>
+          </svg>
+
+          <span>
+            โปรดตรวจสอบข้อมูลก่อนบันทึก
+          </span>
+        </div>
+
+        <button
+          class="action corporate-primary"
+          id="btn-submit-enroll"
+          disabled
+          type="button"
+        >
+          <span>บันทึกการลงทะเบียน</span>
+
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14"/>
+            <path d="m13 6 6 6-6 6"/>
+          </svg>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT : CAMERA -->
+    <div class="panel camera-panel">
+
+      <div class="panel-heading corporate-heading">
+
+        <div class="heading-icon camera-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h4l2-2h4l2 2h4v12H4V7Z"/>
+            <circle cx="12" cy="13" r="3.5"/>
+          </svg>
+        </div>
+
+        <div>
+          <span class="section-label">ขั้นตอนที่ 2</span>
+          <h3>บันทึกภาพใบหน้า</h3>
+          <p class="sub">
+            ถ่ายภาพหรืออัปโหลดภาพจากเครื่อง
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- Camera -->
+      <div class="camera-content">
+
+        <div class="cam-wrap camera-stage">
+
+          <video
+            id="enroll-video"
+            autoplay  
+            muted
+            playsinline
+          ></video>
+
+
+          <!-- Camera Overlay -->
+          <div
+            class="scan-overlay"
+            aria-hidden="true"
+          >
+
+            <div class="face-guide">
+
+              <span class="corner tl"></span>
+              <span class="corner tr"></span>
+              <span class="corner bl"></span>
+              <span class="corner br"></span>
+
+            </div>
+
+            <div class="scan-line"></div>
+
+          </div>
+
+
+          <img
+            id="enroll-upload-preview"
+            class="upload-preview"
+            src=""
+            alt=""
+            style="display:none;"
+          >
+
+
+          <!-- Camera Status -->
+          <div
+            class="cam-status corporate-camera-status"
+            id="enroll-cam-status"
+          >
+            <span class="status-dot"></span>
+            กำลังเปิดกล้อง...
+          </div>
+
+        </div>
+
+
+        <!-- Camera Guide -->
+        <div class="camera-guide">
+
+          <div class="guide-item">
+            <span class="guide-number">01</span>
+            <span>มองตรงไปที่กล้อง</span>
+          </div>
+
+          <div class="guide-item">
+            <span class="guide-number">02</span>
+            <span>ให้ใบหน้าอยู่ภายในกรอบ</span>
+          </div>
+
+          <div class="guide-item">
+            <span class="guide-number">03</span>
+            <span>หลีกเลี่ยงแสงด้านหลัง</span>
+          </div>
+
+        </div>
+
+
+        <!-- Actions -->
+        <div class="capture-actions corporate-actions">
+
+          <button
+            class="capture-button corporate-capture"
+            id="btn-capture-shot"
+            type="button"
+          >
+
+            <span class="capture-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 7h4l2-2h4l2 2h4v12H4V7Z"/>
+                <circle cx="12" cy="13" r="3"/>
+              </svg>
+            </span>
+
+            <span class="capture-text">
+              <strong>ถ่ายภาพ</strong>
+              <small>ใช้กล้องของอุปกรณ์</small>
+            </span>
+
+          </button>
+
+
+          <label
+            class="upload-button corporate-upload"
+            for="enroll-image-upload"
+          >
+
+            <span class="upload-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 16V4"/>
+                <path d="m7 9 5-5 5 5"/>
+                <path d="M5 20h14"/>
+              </svg>
+            </span>
+
+            <span class="upload-text">
+              <strong>อัปโหลดภาพ</strong>
+              <small>เลือกไฟล์จากเครื่อง</small>
+            </span>
+
+          </label>
+
+        </div>
+
+
+        <input
+          id="enroll-image-upload"
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

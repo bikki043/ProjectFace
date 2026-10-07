@@ -1,0 +1,389 @@
+<style>
+/* ============================================================
+   DASHBOARD VIEW THEME (ย้ายมาจากไฟล์ดีไซน์ dashboard.html)
+   ============================================================ */
+:root {
+  --bg: #151515;
+  --panel: #1D1D1D;
+  --panel-raised: #252525;
+  --panel-line: #3A3A3A;
+  --ink: #F7F5EF;
+  --ink-dim: #989898;
+  --accent: #FFCC00;
+  --accent-dim: #8A6E00;
+  --warn: #F0B900;
+  --danger: #E06A5F;
+}
+
+.mono { font-family: 'IBM Plex Mono', monospace; }
+.display { font-family: 'Bai Jamjuree', sans-serif; letter-spacing: .5px; font-weight: 700; }
+
+#view-dashboard .page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+#view-dashboard .eyebrow {
+  display: block;
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+#view-dashboard .page-heading h2 {
+  font-family: 'Bai Jamjuree', sans-serif;
+  font-size: 38px;
+  line-height: 1.1;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+#view-dashboard .view-chip {
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  color: var(--accent);
+  font-size: 11px;
+  padding: 7px 11px;
+  white-space: nowrap;
+  letter-spacing: .5px;
+}
+
+#view-dashboard .panel {
+  position: relative;
+  overflow: hidden;
+  background: rgba(29, 29, 29, 0.98);
+  border: 1px solid var(--panel-line);
+  border-radius: 3px;
+  padding: 24px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+  margin-bottom: 24px;
+}
+
+#view-dashboard .panel::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 24px; right: 24px;
+  height: 2px;
+  background: var(--accent);
+  opacity: .75;
+}
+
+#view-dashboard .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+
+#view-dashboard .stat-card {
+  position: relative;
+  background: rgba(29, 29, 29, 0.98);
+  border: 1px solid var(--panel-line);
+  border-radius: 3px;
+  padding: 20px;
+}
+#view-dashboard .stat-card::after {
+  content: "";
+  position: absolute; right: 0; bottom: 0;
+  width: 28px; height: 2px;
+  background: var(--accent);
+}
+#view-dashboard .stat-card .num { font-size: 30px; font-family: 'Bai Jamjuree'; font-weight: 700; color: var(--accent); }
+#view-dashboard .stat-card .lbl { color: var(--ink-dim); font-size: 12px; margin-top: 4px; }
+
+#view-dashboard .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#view-dashboard table { width: 100%; border-collapse: collapse; font-size: 13px; }
+#view-dashboard th { text-align: left; color: var(--ink-dim); font-weight: 500; padding: 10px 8px; border-bottom: 1px solid var(--panel-line); font-size: 11px; white-space: nowrap; }
+#view-dashboard td { padding: 10px 8px; border-bottom: 1px solid var(--panel-line); white-space: nowrap; }
+#view-dashboard tr:last-child td { border-bottom: none; }
+
+#view-dashboard .emp-id-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--accent);
+  background: rgba(255, 204, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  border: 1px solid rgba(255, 204, 0, 0.25);
+  display: inline-block;
+}
+
+#view-dashboard .tag { padding: 2px 8px; border-radius: 20px; font-size: 11px; display: inline-block; }
+#view-dashboard .tag.in { background: rgba(255, 204, 0, 0.15); color: var(--accent); }
+#view-dashboard .tag.out { background: rgba(255, 255, 255, 0.08); color: var(--ink-dim); }
+
+#view-dashboard .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
+#view-dashboard .toolbar h2 { margin: 0; }
+#view-dashboard .section-toolbar h2 { font-family: 'Bai Jamjuree', sans-serif; font-size: 18px; }
+#view-dashboard .panel-note { color: var(--ink-dim); font-size: 12px; }
+#view-dashboard .toolbar-actions { display: flex; align-items: center; gap: 12px; }
+
+#view-dashboard .icon-button {
+  width: 34px; height: 34px; padding: 0;
+  border: 1px solid var(--panel-line);
+  border-radius: 3px;
+  background: #080808;
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+#view-dashboard .icon-button:hover { border-color: var(--accent); color: var(--accent); }
+#view-dashboard .icon-button.is-loading { animation: dash-spin 0.8s linear infinite; opacity: 0.65; }
+@keyframes dash-spin { to { transform: rotate(360deg); } }
+
+#view-dashboard .export-button {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 38px; padding: 6px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--panel-raised);
+  color: var(--accent);
+  text-decoration: none;
+  box-shadow: 0 2px 0 var(--accent-dim), inset 0 1px 0 rgba(255, 255, 255, .1);
+  transition: transform .15s, filter .15s, box-shadow .15s;
+}
+#view-dashboard .export-button:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 4px 0 var(--accent-dim), inset 0 1px 0 rgba(255, 255, 255, .14); }
+#view-dashboard .export-button strong, #view-dashboard .export-button small { display: block; line-height: 1.1; }
+#view-dashboard .export-button strong { font-size: 12px; }
+#view-dashboard .export-button small { font-size: 9px; margin-top: 3px; opacity: .7; }
+#view-dashboard .download-mark { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid currentColor; border-radius: 50%; font-size: 17px; line-height: 1; }
+
+#view-dashboard .delete-user {
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  border: 1px solid #5A2A26;
+  border-radius: 5px;
+  background: none;
+  color: var(--danger);
+  font-size: 11px;
+  cursor: pointer;
+}
+#view-dashboard .delete-user:hover { background: rgba(229, 88, 79, 0.12); }
+
+#view-dashboard .empty { color: var(--ink-dim); font-size: 13px; text-align: center; padding: 30px 0; }
+
+#view-dashboard .registered-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0 16px;
+  border-bottom: 1px solid var(--panel-line);
+  margin-bottom: 12px;
+}
+
+#view-dashboard .registered-search {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+}
+
+#view-dashboard .registered-search svg {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  stroke: var(--ink-dim);
+  fill: none;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+#view-dashboard .registered-search input {
+  width: 100%;
+  background: #080808;
+  border: 1px solid var(--panel-line);
+  color: var(--ink);
+  padding: 9px 12px 9px 32px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Noto Sans Thai', sans-serif;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+#view-dashboard .registered-search input::placeholder { color: var(--ink-dim); }
+
+#view-dashboard .registered-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.14);
+}
+
+#view-dashboard .registered-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  border-radius: 20px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+#view-dashboard #registered-users-table th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+  transition: color .15s;
+}
+#view-dashboard #registered-users-table th[data-sort]:hover { color: var(--accent); }
+#view-dashboard #registered-users-table th.sorted { color: var(--accent); }
+
+#view-dashboard .sort-arrow {
+  display: inline-block;
+  margin-left: 3px;
+  font-size: 9px;
+  opacity: 0.4;
+}
+#view-dashboard th.sorted .sort-arrow { opacity: 1; }
+
+#view-dashboard .user-cell { display: flex; align-items: center; gap: 12px; }
+
+#view-dashboard .user-cell img {
+  width: 38px; height: 38px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 2px solid var(--accent-dim);
+  background: #080808;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  #view-dashboard .page-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  #view-dashboard .page-heading h2 { font-size: 28px; }
+  #view-dashboard .stat-row { grid-template-columns: 1fr; gap: 10px; }
+  #view-dashboard .panel { padding: 16px; }
+  #view-dashboard .registered-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+  #view-dashboard .registered-search { max-width: none; }
+  #view-dashboard .toolbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+  #view-dashboard .toolbar-actions { width: 100%; justify-content: flex-end; }
+}
+</style>
+
+<section class="view" id="view-dashboard">
+    <div class="page-heading">
+        <div>
+            <span class="eyebrow">ภาพรวมระบบ</span>
+            <h2>ประวัติและสรุปผล</h2>
+        </div>
+        <span class="view-chip">ภาพรวม</span>
+    </div>
+
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="num" id="stat-users">-</div>
+            <div class="lbl">ผู้ใช้ทั้งหมดในระบบ</div>
+        </div>
+        <div class="stat-card">
+            <div class="num" id="stat-today">-</div>
+            <div class="lbl">สแกนวันนี้</div>
+        </div>
+        <div class="stat-card">
+            <div class="num" id="stat-total">-</div>
+            <div class="lbl">ประวัติทั้งหมด</div>
+        </div>
+    </div>
+
+    <div class="panel registered-panel">
+        <div class="toolbar section-toolbar">
+            <h2>ผู้ลงทะเบียน</h2>
+            <span class="panel-note">สมาชิกในระบบ</span>
+        </div>
+
+        <div class="registered-toolbar">
+            <div class="registered-search">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input type="text" id="registered-search-input" placeholder="ค้นหารหัสพนักงาน, ชื่อ หรือตำแหน่ง...">
+            </div>
+            <span class="registered-count" id="registered-count">0 คน</span>
+        </div>
+
+        <div class="table-responsive">
+            <table id="registered-users-table">
+                <thead>
+                    <tr>
+                        <th data-sort="emp_id">รหัสพนักงาน <span class="sort-arrow">▲</span></th>
+                        <th data-sort="name">ชื่อ-นามสกุล <span class="sort-arrow">▲</span></th>
+                        <th data-sort="position">ตำแหน่ง <span class="sort-arrow">▲</span></th>
+                        <th style="text-align:right;">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="registered-users"></tbody>
+            </table>
+        </div>
+        <div class="empty" id="registered-empty" style="display:none;">ยังไม่มีผู้ลงทะเบียน</div>
+    </div>
+
+    <div class="panel">
+        <div class="toolbar section-toolbar">
+            <h2>สรุปเวลาเข้า-ออกงานวันนี้</h2>
+            <span class="panel-note">ฐานข้อมูลสำหรับคำนวณ OT</span>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>รหัสพนักงาน</th>
+                        <th>ชื่อ</th>
+                        <th>เข้างาน</th>
+                        <th>ออกงาน</th>
+                        <th>รวมชั่วโมง</th>
+                    </tr>
+                </thead>
+                <tbody id="worktime-table-body"></tbody>
+            </table>
+        </div>
+        <div class="empty" id="worktime-empty" style="display:none;">ยังไม่มีข้อมูลเข้า-ออกงานวันนี้</div>
+    </div>
+
+    <div class="panel">
+        <div class="toolbar section-toolbar">
+            <h2>ประวัติล่าสุด</h2>
+            <div class="toolbar-actions">
+                <button class="icon-button" id="btn-refresh" type="button" title="รีเฟรชข้อมูล" aria-label="รีเฟรชข้อมูล">↻</button>
+                <a href="#" class="export-button" id="btn-export"><span class="download-mark">↓</span><span><strong>Export CSV</strong><small>ดาวน์โหลดรายงาน</small></span></a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>รหัสพนักงาน</th>
+                        <th>ชื่อ</th>
+                        <th>เวลา</th>
+                        <th>ประเภท</th>
+                        <th>ความมั่นใจ</th>
+                    </tr>
+                </thead>
+                <tbody id="logs-table-body"></tbody>
+            </table>
+        </div>
+        <div class="empty" id="logs-empty" style="display:none;">ยังไม่มีประวัติการสแกน</div>
+    </div>
+
+    <!-- Modal รายละเอียดผู้ใช้ (dashboard.js อ้างอิง element เหล่านี้) -->
+    <div class="user-detail-modal" id="user-detail-modal" style="display:none;">
+        <div class="modal-content">
+            <button id="close-user-modal" type="button" aria-label="ปิด">×</button>
+            <img id="modal-user-img" alt="">
+            <div id="modal-user-name"></div>
+            <div id="modal-user-position"></div>
+            <div>ตำแหน่ง: <span id="modal-user-pos-detail"></span></div>
+            <div>รหัส: <span id="modal-user-id"></span></div>
+            <div>ลงทะเบียนเมื่อ: <span id="modal-user-created"></span></div>
+        </div>
+    </div>
+</section>

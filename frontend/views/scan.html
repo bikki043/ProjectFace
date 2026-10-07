@@ -1,0 +1,58 @@
+<section class="view active" id="view-scan">
+  <div class="kiosk-start-overlay" id="kiosk-start-overlay">
+    <div class="kiosk-start-content">
+      <div class="kiosk-start-icon">👋</div>
+      <h3>แตะหน้าจอเพื่อเริ่มใช้งาน</h3>
+      <p>แตะเพื่อเปิดกล้องและเริ่มบันทึกเวลา</p>
+    </div>
+  </div>
+
+  <div class="page-heading scan-page-heading">
+    <div class="heading-left">
+      <span class="eyebrow">บริการสำหรับพนักงาน</span>
+      <h2>บันทึกเวลาเข้า-ออก</h2>
+      <p>ลงเวลาทำงานด้วยการยืนยันตัวตน</p>
+    </div>
+  </div>
+
+  <div class="scan-console">
+    <div class="panel camera-panel">
+      <div class="panel-heading">
+        <div>
+          <h3>สแกนใบหน้า</h3>
+        </div>
+        <span class="step-number">01</span>
+      </div>
+      <div class="cam-wrap camera-stage">
+        <video id="scan-video" autoplay muted playsinline></video>
+        <div class="scan-overlay" aria-hidden="true">
+          <div class="face-guide"><span></span></div>
+          <div class="scan-line"></div>
+          <div class="overlay-label">จัดใบหน้าให้อยู่กลางกรอบ</div>
+        </div>
+        <div class="cam-status" id="scan-cam-status">กำลังเปิดกล้อง...</div>
+        <div class="scan-countdown" id="scan-countdown" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="panel result-panel">
+      <div class="panel-heading">
+        <div>
+          <h3>ผลการบันทึกเวลา</h3>
+        </div>
+        <span class="step-number">02</span>
+      </div>
+      <div class="scan-result-empty" id="scan-empty">
+        <div class="result-icon">ID</div>
+        <strong>พร้อมตรวจสอบ</strong>
+      </div>
+      <div class="result-box scan-result-card" id="scan-result">
+        <div class="popup-status">ผลการยืนยันตัวตน</div>
+        <div class="name" id="result-name">-</div>
+        <div class="meta" id="result-meta">-</div>
+        <div class="confidence-bar"><div class="fill" id="result-confidence-fill" style="width:0%"></div></div>
+        <div class="meta confidence-text" id="result-confidence-text">ระดับการจับคู่ใบหน้า: -</div>
+      </div>
+    </div>
+  </div>
+</section>

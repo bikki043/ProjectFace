@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ผู้ดูแลระบบ — ภาพรวมและสรุปผล</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #091521;
+      --panel: rgba(15, 23, 42, 0.92);
+      --panel-alt: rgba(15, 23, 42, 0.72);
+      --border: rgba(148, 163, 184, 0.18);
+      --ink: #edf3ff;
+      --muted: #a5b4c8;
+      --accent: #ffc857;
+      --accent-strong: #f4b63d;
+      --success: #73d7aa;
+      --danger: #ff7a7a;
+      --shadow: 0 20px 50px rgba(1, 4, 15, 0.42);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #060d18 0%, #0e1727 100%);
+      color: var(--ink);
+      font-family: 'Noto Sans Thai', sans-serif;
+    }
+
+    .admin-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 18px 50px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 200, 87, 0.6);
+    }
+
+    .btn:disabled {
+      cursor: wait;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .btn.primary {
+      background: rgba(255, 200, 87, 0.12);
+      color: var(--accent);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--ink);
+    }
+
+    .hr-nav {
+      display: flex;
+      gap: 6px;
+      margin: 0 0 20px;
+      padding: 6px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .hr-nav button {
+      flex: 0 0 auto;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      padding: 11px 16px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .hr-nav button.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .hr-view[hidden] { display: none; }
+
+    .hr-view {
+      display: grid;
+      gap: 20px;
+    }
+
+    .data-table-wrap { overflow-x: auto; }
+    .data-table { min-width: 720px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .form-field { display: grid; gap: 6px; }
+    .form-field label { color: var(--muted); font-size: 12px; }
+    .form-field input,
+    .form-field select {
+      min-width: 0;
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--ink);
+      background: rgba(15, 23, 42, 0.85);
+      font: inherit;
+    }
+
+    .form-field output {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .payroll-employee-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 15px;
+      margin: 0 0 14px;
+      border-left: 3px solid var(--accent);
+      background: rgba(255, 200, 87, 0.06);
+    }
+
+    .payroll-employee-summary strong { color: var(--ink); }
+    .payroll-employee-summary span { color: var(--muted); font-size: 13px; }
+
+    .attendance-breakdown {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .attendance-day {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 14px;
+      background: rgba(255, 255, 255, 0.018);
+    }
+
+    .attendance-day-head,
+    .attendance-day-total,
+    .scan-pair {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .attendance-day-head { margin-bottom: 9px; }
+    .attendance-day-head strong { font-size: 14px; }
+
+    .attendance-state {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .attendance-state.qualifies { color: var(--success); background: rgba(115, 215, 170, 0.12); }
+    .attendance-state.short { color: var(--accent); background: rgba(255, 200, 87, 0.12); }
+    .attendance-state.open { color: #a9c7ff; background: rgba(103, 151, 255, 0.12); }
+
+    .scan-pair {
+      justify-content: flex-start;
+      padding: 7px 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+      color: var(--muted);
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .scan-pair .scan-time { min-width: 76px; color: var(--ink); font-weight: 600; }
+    .scan-pair .scan-duration { margin-left: auto; }
+
+    .attendance-day-total {
+      padding-top: 9px;
+      margin-top: 3px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .attendance-day-total strong { color: var(--ink); }
+
+    .breakdown-empty {
+      padding: 18px 10px;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .row-actions { display: flex; gap: 8px; }
+
+    .small-btn {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(115, 215, 170, 0.12);
+      color: var(--success);
+      font-size: 12px;
+    }
+
+    .status-badge.inactive {
+      color: var(--muted);
+      background: rgba(148, 163, 184, 0.12);
+    }
+
+    .status-badge.leave {
+      color: var(--accent);
+      background: rgba(255, 200, 87, 0.12);
+    }
+
+    .notice {
+      min-height: 22px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    dialog {
+      width: min(520px, calc(100% - 28px));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #101b2a;
+      color: var(--ink);
+      padding: 22px;
+    }
+
+    dialog::backdrop { background: rgba(0, 0, 0, 0.66); }
+    dialog h2 { margin: 0 0 18px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+    .title-wrap h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      font-family: 'Bai Jamjuree', sans-serif;
+    }
+
+    .title-wrap p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .logout-btn {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .summary-box {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .mini-stat {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .mini-stat .label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .mini-stat .value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: 'Bai Jamjuree', sans-serif;
+    }
+
+    .status-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .status-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--ink);
+    }
+
+    .status-list .status-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .dot.gold { background: var(--accent); }
+    .dot.green { background: var(--success); }
+    .dot.red { background: var(--danger); }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .search-wrap input,
+    .toolbar select {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--ink);
+      padding: 9px 12px;
+      min-width: 180px;
+    }
+
+    .search-wrap input::placeholder {
+      color: rgba(165, 180, 200, 0.8);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+      font-size: clamp(30px, 3vw, 40px);
+      font-weight: 700;
+      font-family: 'Bai Jamjuree', sans-serif;
+      color: var(--accent);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 18px 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      font-family: 'Bai Jamjuree', sans-serif;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 10px;
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .tag.in { background: rgba(255, 200, 87, 0.12); color: var(--accent); }
+    .tag.out { background: rgba(115, 215, 170, 0.12); color: var(--success); }
+
+    .person-photo,
+    .person-initials {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      border: 1px solid var(--border);
+      background: rgba(255, 200, 87, 0.12);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .photo-cell { width: 66px; }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 24px 10px;
+    }
+
+    @media (max-width: 700px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: flex-start; }
+      .top-actions { width: 100%; }
+      .panel { overflow-x: auto; }
+      table { min-width: 620px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="/css/corporate.css">
+</head>
+<body class="hr-dashboard">
+  <div class="admin-shell">
+    <header class="topbar">
+      <a class="admin-brand" href="/admin/dashboard" aria-label="FaceGate ภาพรวม">
+        <span class="brand-mark" aria-hidden="true">FG</span>
+        <span><strong>FaceGate</strong><small>ระบบบริหารงานบุคคล</small></span>
+      </a>
+      <div class="title-wrap">
+        <h1>ภาพรวมและสรุปผล</h1>
+        <p>ข้อมูลพนักงานและการลงเวลาประจำวัน</p>
+      </div>
+      <div class="top-actions">
+        <button class="btn secondary" id="refresh-btn" type="button">อัปเดตข้อมูล</button>
+        <a class="btn primary" id="export-btn" href="/api/logs/export" target="_blank" rel="noopener">ส่งออกรายงาน</a>
+        <button class="logout-btn" id="logout-btn" type="button">ออกจากระบบ</button>
+      </div>
+      <span class="notice" id="refresh-status" role="status" aria-live="polite"></span>
+    </header>
+
+    <nav class="hr-nav" aria-label="เมนูฝ่ายบุคคล">
+      <button type="button" class="active" data-view="overview">ภาพรวม</button>
+      <button type="button" data-view="employees">พนักงาน</button>
+      <button type="button" data-view="attendance">เวลาเข้างาน</button>
+      <button type="button" data-view="rates">อัตราค่าจ้าง</button>
+      <button type="button" data-view="payroll">เงินเดือน</button>
+    </nav>
+
+    <section class="hr-view" id="view-overview">
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="label">จำนวนพนักงาน</div>
+        <div class="value" id="stat-users">0</div>
+      </article>
+      <article class="stat-card">
+            <div class="label">ลงเวลาเข้าแล้ววันนี้</div>
+        <div class="value" id="stat-checkin">0</div>
+      </article>
+      <article class="stat-card">
+            <div class="label">ลงเวลาออกแล้ววันนี้</div>
+        <div class="value" id="stat-checkout">0</div>
+      </article>
+      <article class="stat-card">
+            <div class="label">รายการลงเวลาทั้งหมด</div>
+        <div class="value" id="stat-total">0</div>
+      </article>
+    </section>
+
+    <section class="detail-grid">
+      <article class="panel">
+        <h2>สรุปวันนี้</h2>
+        <div class="summary-box">
+          <div class="mini-stat">
+            <div class="label">พนักงานที่ลงเวลาเข้า</div>
+            <div class="value" id="attendance-rate">0%</div>
+          </div>
+          <div class="mini-stat">
+            <div class="label">รายการลงเวลาวันนี้</div>
+            <div class="value" id="stat-today">0</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>สถานะล่าสุด</h2>
+        <ul class="status-list" id="today-status-list">
+          <li>
+            <span class="status-text"><span class="dot gold"></span> ยังไม่ลงเวลา</span>
+            <strong id="status-pending">0</strong>
+          </li>
+          <li>
+            <span class="status-text"><span class="dot green"></span> เข้างานแล้ว</span>
+            <strong id="status-checkin">0</strong>
+          </li>
+          <li>
+            <span class="status-text"><span class="dot red"></span> ออกจากงานแล้ว</span>
+            <strong id="status-checkout">0</strong>
+          </li>
+        </ul>
+      </article>
+    </section>
+    </section>
+
+    <section class="hr-view" id="view-attendance" hidden>
+    <section class="panel">
+      <div class="table-header">
+        <h2>รายการลงเวลาล่าสุด</h2>
+        <div class="toolbar">
+          <label class="search-wrap">
+            <span>ค้นหารายการ</span>
+            <input id="search-input" type="search" placeholder="ชื่อ รหัสพนักงาน หรือรายการ" />
+          </label>
+          <select id="filter-type">
+            <option value="all">ทั้งหมด</option>
+            <option value="check-in">เข้างาน</option>
+            <option value="check-out">ออกงาน</option>
+          </select>
+        </div>
+      </div>
+      <div id="logs-empty" class="empty">ยังไม่มีข้อมูลประวัติ</div>
+      <table>
+        <thead>
+          <tr>
+            <th>รูป</th>
+            <th>รหัส</th>
+            <th>ชื่อ</th>
+            <th>เวลา</th>
+            <th>ประเภท</th>
+            <th>ระดับการจับคู่ใบหน้า</th>
+          </tr>
+        </thead>
+        <tbody id="logs-table-body"></tbody>
+      </table>
+    </section>
+    </section>
+
+    <section class="hr-view" id="view-employees" hidden>
+      <section class="panel">
+        <div class="table-header">
+          <h2>ทะเบียนพนักงาน</h2>
+          <div class="toolbar">
+            <label class="search-wrap"><span>ค้นหา</span><input id="employee-search" type="search" placeholder="ชื่อ รหัส ตำแหน่ง" /></label>
+            <select id="employee-status-filter" aria-label="กรองสถานะ">
+              <option value="all">ทุกสถานะ</option>
+              <option value="Active">ปฏิบัติงาน</option>
+              <option value="On Leave">ลา</option>
+              <option value="Inactive">พ้นสภาพ</option>
+            </select>
+          </div>
+        </div>
+        <p class="notice" id="employee-count"></p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>รหัส</th><th>ชื่อพนักงาน</th><th>ตำแหน่ง</th><th>โทรศัพท์</th><th>สถานะ</th><th>วันที่เพิ่ม</th><th>จัดการ</th></tr></thead>
+            <tbody id="employees-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="hr-view" id="view-rates" hidden>
+      <section class="panel">
+        <div class="table-header">
+          <h2>อัตราค่าจ้างพนักงาน</h2>
+          <label class="search-wrap"><span>ค้นหา</span><input id="rate-search" type="search" placeholder="ชื่อหรือรหัสพนักงาน" /></label>
+        </div>
+        <div class="data-table-wrap"><table class="data-table">
+          <thead><tr><th>รหัส</th><th>ชื่อพนักงาน</th><th>ประเภทค่าจ้าง</th><th>เงินเดือน (บาท/เดือน)</th><th>ค่าจ้าง (บาท/วัน)</th><th>ค่าล่วงเวลา (บาท/ชั่วโมง)</th><th>แก้ไข</th></tr></thead>
+          <tbody id="rates-table-body"></tbody>
+        </table></div>
+        <p class="notice" id="rates-count"></p>
+      </section>
+    </section>
+
+    <section class="hr-view" id="view-payroll" hidden>
+      <section class="panel">
+        <h2>คำนวณเงินเดือนพนักงาน</h2>
+        <p class="notice">พนักงานรายวันได้รับค่าจ้างเมื่อมีเวลาเข้าและออกครบอย่างน้อย 2 นาที ส่วนพนักงานรายเดือนคิดตามวันทำงานวันจันทร์ถึงศุกร์และหักวันที่ขาดงาน ระบบยังไม่รวมวันหยุดบริษัท</p>
+        <form id="payroll-form">
+          <div class="form-grid">
+            <div class="form-field"><label for="payroll-employee">พนักงาน</label><select id="payroll-employee" required></select></div>
+            <div class="form-field"><label for="payroll-month">เดือน</label><select id="payroll-month" required></select></div>
+            <div class="form-field"><label for="payroll-year">ปี</label><input id="payroll-year" type="number" min="2000" max="2100" required /></div>
+            <div class="form-field"><label>มาทำงาน</label><output id="payroll-days-preview">0 / 0 วัน</output></div>
+            <div class="form-field"><label>วันที่ขาดงาน</label><output id="payroll-absence-preview">0 วัน</output></div>
+            <div class="form-field"><label>เงินเดือน/ค่าจ้างที่คำนวณได้</label><output id="payroll-base-preview">0 บาท</output></div>
+            <div class="form-field"><label>เวลาล่วงเวลา</label><output id="payroll-hours-preview">0 ชั่วโมง</output></div>
+            <div class="form-field"><label>ค่าล่วงเวลา</label><output id="payroll-overtime-preview">0 บาท</output></div>
+            <div class="form-field"><label for="payroll-additions">รายได้อื่น</label><input id="payroll-additions" type="number" min="0" step="0.01" value="0" required /></div>
+            <div class="form-field"><label for="payroll-tax">ภาษีหัก ณ ที่จ่าย</label><input id="payroll-tax" type="number" min="0" step="0.01" value="0" required /></div>
+            <div class="form-field"><label for="payroll-social">ประกันสังคม</label><input id="payroll-social" type="number" min="0" step="0.01" value="0" required /></div>
+            <div class="form-field"><label for="payroll-deductions">รายการหักอื่น</label><input id="payroll-deductions" type="number" min="0" step="0.01" value="0" required /></div>
+          </div>
+          <div class="payroll-employee-summary" id="payroll-employee-summary" aria-live="polite">
+            <strong>เลือกพนักงานเพื่อดูรายละเอียดการคำนวณ</strong>
+            <span></span>
+          </div>
+          <section aria-labelledby="payroll-attendance-heading">
+            <div class="table-header">
+              <h2 id="payroll-attendance-heading">รายละเอียดสแกนและ OT รายวัน</h2>
+              <span class="notice" id="payroll-breakdown-caption">เริ่มคิดค่าล่วงเวลาเมื่อเวลาทำงานที่จับคู่กันเกิน 2 นาทีต่อวัน</span>
+            </div>
+            <div id="payroll-attendance-breakdown" class="attendance-breakdown" aria-live="polite">
+              <div class="breakdown-empty">เลือกพนักงานและงวดเพื่อโหลดรายละเอียดสแกน</div>
+            </div>
+          </section>
+          <button class="btn primary" type="submit">คำนวณและบันทึกเงินเดือน</button>
+          <p class="notice" id="payroll-notice" aria-live="polite"></p>
+        </form>
+      </section>
+      <section class="panel">
+        <div class="table-header"><h2>ประวัติเงินเดือน</h2><div class="toolbar">
+          <select id="payroll-filter-month" aria-label="กรองเดือน"></select>
+          <input id="payroll-filter-year" type="number" min="2000" max="2100" aria-label="กรองปี" />
+          <button class="btn secondary" id="payroll-filter-btn" type="button">ค้นหา</button>
+        </div></div>
+        <div class="data-table-wrap"><table class="data-table">
+          <thead><tr><th>งวด</th><th>รหัส</th><th>ชื่อพนักงาน</th><th>ประเภท</th><th>เงินเดือน/ค่าจ้าง (บาท)</th><th>ค่าล่วงเวลา (บาท)</th><th>รายได้เพิ่ม (บาท)</th><th>หักรวม (บาท)</th><th>รับสุทธิ (บาท)</th></tr></thead>
+          <tbody id="payroll-table-body"></tbody>
+        </table></div>
+        <p class="notice" id="payroll-list-notice"></p>
+      </section>
+    </section>
+  </div>
+
+  <dialog id="employee-dialog">
+    <form id="employee-form">
+      <h2>แก้ไขข้อมูลพนักงาน</h2>
+      <input id="employee-edit-id" type="hidden" />
+      <div class="form-grid">
+        <div class="form-field"><label for="employee-edit-name">ชื่อ-นามสกุล</label><input id="employee-edit-name" required /></div>
+        <div class="form-field"><label for="employee-edit-position">ตำแหน่ง</label><input id="employee-edit-position" /></div>
+        <div class="form-field"><label for="employee-edit-phone">โทรศัพท์</label><input id="employee-edit-phone" /></div>
+        <div class="form-field"><label for="employee-edit-status">สถานะการทำงาน</label><select id="employee-edit-status"><option value="Active">ปฏิบัติงาน</option><option value="On Leave">ลา</option><option value="Inactive">พ้นสภาพ</option></select></div>
+        <div class="form-field"><label for="employee-edit-pay-basis">ประเภทค่าจ้าง</label><select id="employee-edit-pay-basis"><option value="daily">รายวัน</option><option value="monthly">รายเดือน</option></select></div>
+        <div class="form-field"><label for="employee-edit-monthly">เงินเดือนต่อเดือน</label><input id="employee-edit-monthly" type="number" min="0" step="0.01" required /></div>
+        <div class="form-field"><label for="employee-edit-daily">ค่าจ้างต่อวัน</label><input id="employee-edit-daily" type="number" min="0" step="0.01" required /></div>
+        <div class="form-field"><label for="employee-edit-overtime">ค่าล่วงเวลาต่อชั่วโมง</label><input id="employee-edit-overtime" type="number" min="0" step="0.01" required /></div>
+      </div>
+      <p class="notice" id="employee-edit-notice" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="btn secondary" type="button" id="employee-cancel">ยกเลิก</button><button class="btn primary" type="submit">บันทึก</button></div>
+    </form>
+  </dialog>
+
+<script type="module" src="/js/admin-dashboard.js"></script>
+</body>
+</html>

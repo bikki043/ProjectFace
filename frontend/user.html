@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>พนักงาน — บันทึกเวลา</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/corporate.css">
+</head>
+<body class="user-app">
+  <header class="app-header">
+    <a class="app-brand" href="/user" aria-label="FaceGate หน้าหลัก">
+      <span class="brand-mark" aria-hidden="true">FG</span>
+      <span><strong>FaceGate</strong><small>ระบบบริหารงานบุคคล</small></span>
+    </a>
+    <span class="header-caption">พอร์ทัลพนักงาน</span>
+  </header>
+
+  <nav class="app-nav" aria-label="เมนูผู้ใช้">
+    <button class="tab-btn active" type="button" aria-pressed="true" aria-controls="view-scan" data-view="scan">บันทึกเวลา</button>
+    <button class="tab-btn" type="button" aria-pressed="false" aria-controls="view-enroll" data-view="enroll">ลงทะเบียนพนักงาน</button>
+    <a class="admin-link" href="/admin/login">เข้าสู่ระบบแอดมิน</a>
+  </nav>
+
+  <main class="workspace-main">
+    <div id="views-root" aria-live="polite"></div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="js/user-app.js"></script>
+</body>
+</html>
